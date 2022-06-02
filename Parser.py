@@ -1,3 +1,18 @@
+# this command class should probably be somewhere else
+from enum import Enum
+
+
+class Command(Enum):
+    C_ARITHMETIC = 0
+    C_PUSH = 1
+    C_POP = 2
+    C_LABEL = 3
+    C_GOTO = 4
+
+
+for command_type in Command:
+    print(command_type)
+
 # add a blank line between the file path and new prints!
 print()
 
@@ -16,12 +31,20 @@ class Parser:
             stripped_line = line.strip(" ").strip("\n")
             try:
                 # if the line is a comment or whitespace, move on.
-                if len(line) == 1 or (line[0] == "/" and line[1] == "/"):
+                if len(line) == 1:
                     # print("filtered!")
                     continue
+                if stripped_line.index("//") == 0:
+                    continue
+
+                if stripped_line.index("//") > 0:
+                    stripped_line = stripped_line[0:line.index("//")]
+
             except IndexError:
                 # print("filtered!")
                 continue
+            except ValueError:
+                pass
 
             self.lines.append(stripped_line)
 
@@ -82,15 +105,7 @@ class Parser:
         # return "C_ARITHMETIC" later on in the code.
         math = [ele for ele in arithmetic_strings if (ele in stripped_line)]
 
-        split_line = stripped_line.split(" ")
-        for argument in split_line:
-            if argument == "push":
-                return "C_PUSH"
-
-        if math:
-            return "C_ARITHMETIC"
-        else:
-            return "C_POP"
+        return Command(2)
 
     # find the first argument of the current line
     def arg1(self):
@@ -110,10 +125,10 @@ class Parser:
             return str(e)
 
 
-# parser = Parser("vm/Test.vm")
-# parser.read_file()
-# print()
-#
-# while parser.has_more_commands():
-#     print(parser.arg1() + " " + parser.arg2())
-#     parser.advance()
+parser = Parser("BasicLoop/BasicLoop.vm")
+parser.read_file()
+print()
+
+while parser.has_more_commands():
+    print(parser.command_type().name)
+    parser.advance()

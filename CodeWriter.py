@@ -1,7 +1,8 @@
+# this class writes code into the console to be added to SimpleAdd.asm.
+
+
 # noinspection PyMethodMayBeStatic
 # noinspection GrazieInspection
-
-# this class writes code into the console to be added to SimpleAdd.asm.
 
 
 class CodeWriter:

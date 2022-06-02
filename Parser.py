@@ -8,6 +8,7 @@ class Command(Enum):
     C_POP = 2
     C_LABEL = 3
     C_GOTO = 4
+    C_IF = 5
 
 
 for command_type in Command:
@@ -105,7 +106,41 @@ class Parser:
         # return "C_ARITHMETIC" later on in the code.
         math = [ele for ele in arithmetic_strings if (ele in stripped_line)]
 
-        return Command(2)
+        try:
+            if math:
+                return Command(0)
+        except ValueError:
+            pass
+
+        try:
+            if stripped_line.index("push") == 0:
+                return Command(1)
+        except ValueError:
+            pass
+
+        try:
+            if stripped_line.index("pop") == 0:
+                return Command(2)
+        except ValueError:
+            pass
+
+        try:
+            if stripped_line.index("label") == 0:
+                return Command(3)
+        except ValueError:
+            pass
+
+        try:
+            if stripped_line.index("goto") == 0:
+                return Command(4)
+        except ValueError:
+            pass
+
+        try:
+            if stripped_line.index("if-goto") == 0:
+                return Command(5)
+        except ValueError:
+            pass
 
     # find the first argument of the current line
     def arg1(self):

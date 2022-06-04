@@ -16,10 +16,10 @@ class CodeWriter:
         # if the command is negative:
         if command == "neg":
             assembly.extend([
-                '@SP',    # goto register 0
-                'A=M-1',  # select *[SP-1]
-                'M=-M'    # negate the top of the stack
-            ])
+                            '@SP',    # goto register 0
+                            'A=M-1',  # select *[SP-1]
+                            'M=-M'    # negate the top of the stack
+                            ])
 
         elif command == "not":
             assembly.extend(['@SP',     # goto register 0
@@ -36,7 +36,7 @@ class CodeWriter:
                             'A=M-1',    # goto *(SP-2)
                             'A=A-1',
                             'M=D&M',    # D&M produces a bitwise and of 16 bits
-                            '@SP',      # increment SP
+                            '@SP',      # decrement SP
                             'M=M-1'
                             ])
 
@@ -402,6 +402,27 @@ class CodeWriter:
                                     "@THAT",    # goto THAT and set value
                                     "M=D"
                                     ])
+
+        for assembly_command in assembly:
+            print(assembly_command)
+
+    def translate_branching(self, command):
+        command_breakdown = command.split(" ")
+        assembly = [f'\n// {command}']
+
+        if command_breakdown[0] == "label":
+            assembly.extend([
+                            f'(functionName${command_breakdown[1]})'
+                            ])
+
+        if command_breakdown[0] == "if-goto":
+            assembly.extend([
+                            f'@SP',
+                            f'AM=M-1',
+                            f'D=M',
+                            f'@functionName${command_breakdown[1]}',
+                            f'D;JEQ'
+                            ])
 
         for assembly_command in assembly:
             print(assembly_command)

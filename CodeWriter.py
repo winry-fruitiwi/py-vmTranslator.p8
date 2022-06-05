@@ -421,7 +421,7 @@ class CodeWriter:
                             f'AM=M-1',
                             f'D=M',
                             f'@functionName${command_breakdown[1]}',
-                            f'D;JEQ'
+                            f'D;JNE'
                             ])
 
         for assembly_command in assembly:

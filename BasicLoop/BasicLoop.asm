@@ -51,6 +51,17 @@ M=D
 @SP
 M=M+1
 
+// add
+@SP
+A=M-1
+D=M
+@SP
+A=M-1
+A=A-1
+M=D+M
+@SP
+M=M-1
+
 // pop local 0
 @0
 D=A
@@ -88,6 +99,17 @@ M=D
 @SP
 M=M+1
 
+// sub
+@SP
+A=M-1
+D=M
+@SP
+A=M-1
+A=A-1
+M=M-D
+@SP
+M=M-1
+
 // pop argument 0
 @0
 D=A
@@ -121,7 +143,7 @@ M=M+1
 AM=M-1
 D=M
 @functionName$LOOP_START
-D;JEQ
+D;JNE
 
 // push local 0
 @0

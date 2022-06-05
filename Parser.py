@@ -11,9 +11,6 @@ class Command(Enum):
     C_IF = 5
 
 
-for command_type in Command:
-    print(command_type)
-
 # add a blank line between the file path and new prints!
 print()
 
@@ -158,12 +155,3 @@ class Parser:
             # then, I can check the error message and see what I should do with
             # my error. If it's an index error, then I terminate the program.
             return str(e)
-
-
-parser = Parser("BasicLoop/BasicLoop.vm")
-parser.read_file()
-print()
-
-while parser.has_more_commands():
-    print(parser.command_type().name)
-    parser.advance()

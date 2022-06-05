@@ -19,6 +19,10 @@ while parser.has_more_commands():
     ):
         code_writer.translate_mem_access(current_line)
 
+    # latest bug: did not even try translating C_ARITHMETIC :p
+    if parser.command_type() == Command.C_ARITHMETIC:
+        code_writer.translate_arithmetic(current_line)
+
     # if the command time is label, if (if-goto), or goto, translate using the
     # branching protocol. The function will handle its values inside itself.
     if (

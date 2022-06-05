@@ -415,6 +415,12 @@ class CodeWriter:
                             f'(functionName${command_breakdown[1]})'
                             ])
 
+        if command_breakdown[0] == "goto":
+            assembly.extend([
+                            f'@functionName${command_breakdown[1]}',
+                            f'0;JMP'
+                            ])
+
         if command_breakdown[0] == "if-goto":
             assembly.extend([
                             f'@SP',

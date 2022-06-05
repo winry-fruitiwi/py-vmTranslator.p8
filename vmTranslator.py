@@ -2,7 +2,7 @@ from CodeWriter import CodeWriter
 from Parser import Parser, Command
 
 code_writer = CodeWriter()
-parser = Parser("BasicLoop/BasicLoop.vm")
+parser = Parser("FibonacciSeries/FibonacciSeries.vm")
 
 while parser.has_more_commands():
     current_line = parser.currentLine

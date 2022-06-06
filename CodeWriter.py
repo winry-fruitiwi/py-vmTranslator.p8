@@ -406,6 +406,7 @@ class CodeWriter:
         for assembly_command in assembly:
             print(assembly_command)
 
+    # translates branching commands
     def translate_branching(self, command):
         command_breakdown = command.split(" ")
         assembly = [f'\n// {command}']
@@ -429,6 +430,27 @@ class CodeWriter:
                             f'@functionName${command_breakdown[1]}',
                             f'D;JNE'
                             ])
+
+        for assembly_command in assembly:
+            print(assembly_command)
+
+    # translates function, call, and return commands
+    def translate_function(self, command):
+        command_breakdown = command.split(" ")
+        assembly = [f'\n// {command}']
+
+        if command_breakdown[0] == "function":
+            n_vars = int(command_breakdown[2])
+
+            for i in range(0, n_vars):
+                assembly.extend([
+                    f'({command_breakdown[1]})',
+                    f'@SP',
+                    f'A=M',
+                    f'M=0',
+                    f'@SP',
+                    f'M=M+1'
+                ])
 
         for assembly_command in assembly:
             print(assembly_command)

@@ -9,10 +9,9 @@ class Command(Enum):
     C_LABEL = 3
     C_GOTO = 4
     C_IF = 5
-
-
-# add a blank line between the file path and new prints!
-print()
+    C_FUNCTION = 6
+    C_RETURN = 7
+    C_CALL = 8
 
 
 # this parses the input file and hands it to a currently nonexistent CodeWriter

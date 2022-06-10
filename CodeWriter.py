@@ -4,15 +4,18 @@
 # noinspection PyMethodMayBeStatic
 # noinspection GrazieInspection
 
-
 class CodeWriter:
     def __init__(self):
         # keep track of the comparisons, which have labels
         self.comp_num = 0
 
+        # keep track of the call statement label count
+        self.label_count = 0
+
     # translates arithmetic code, with a command type of C_ARITHMETIC.
     def translate_arithmetic(self, command):
         assembly = [f'\n// {command}']
+
         # if the command is negative:
         if command == "neg":
             assembly.extend([
@@ -165,8 +168,6 @@ class CodeWriter:
     def translate_mem_access(self, command):
         command_breakdown = command.split(" ")
         assembly = [f'\n// {command}']
-
-        # print(command_breakdown)
 
         # a shorter name for command_breakdown[2]
         i = command_breakdown[2]
@@ -410,7 +411,6 @@ class CodeWriter:
     def translate_branching(self, command):
         command_breakdown = command.split(" ")
         assembly = [f'\n// {command}']
-
         if command_breakdown[0] == "label":
             assembly.extend([
                             f'(functionName${command_breakdown[1]})'
@@ -442,15 +442,134 @@ class CodeWriter:
         if command_breakdown[0] == "function":
             n_vars = int(command_breakdown[2])
 
+            assembly.extend([
+                f'({command_breakdown[1]})',
+            ])
+
             for i in range(0, n_vars):
                 assembly.extend([
-                    f'({command_breakdown[1]})',
                     f'@SP',
                     f'A=M',
                     f'M=0',
                     f'@SP',
                     f'M=M+1'
                 ])
+
+            assembly.extend([
+                f'@SP',
+                f'A=M',
+                f'M=0'
+            ])
+
+        elif command_breakdown[0] == "return":
+            assembly.extend([
+                f'@LCL',    # endFrame = LCL
+                f'D=M',
+                f'@R13',
+                f'M=D',
+
+                f'@R14',    # retAddress = *(endFrame - 5)
+                f'M=D',
+                f'@5',
+                f'D=A',
+                f'@R14',
+                f'M=M-D',
+
+                f'@SP',     # *ARG = pop()
+                f'AM=M-1',
+                f'D=M',
+                f'@ARG',
+                f'A=M',
+                f'M=D',
+
+                f'@ARG',    # SP=ARG+1
+                f'D=M+1',
+                f'@SP',
+                f'M=D',
+
+                f'@R13',    # THAT=*(endFrame-1)
+                f'AM=M-1',
+                f'D=M',
+                f'@THAT',
+                f'M=D',
+
+                f'@R13',    # THIS=*(endFrame-1)
+                f'AM=M-1',
+                f'D=M',
+                f'@THIS',
+                f'M=D',
+
+                f'@R13',    # ARG=*(endFrame-1)
+                f'AM=M-1',
+                f'D=M',
+                f'@ARG',
+                f'M=D',
+
+                f'@R13',    # LCL=*(endFrame-1)
+                f'AM=M-1',
+                f'D=M',
+                f'@LCL',
+                f'M=D',
+
+                f'@R14',    # goto retAddress
+                f'A=M',
+                f'0;JMP'
+            ])
+
+        elif command_breakdown[0] == "call":
+            assembly.extend([
+                f'@returnAddress',
+                f'D=A',
+                f'@SP',
+                f'A=M',
+                f'M=D',
+                f'@SP',
+                f'M=M+1',
+
+                f'@LCL',
+                f'D=M',
+                f'@SP',
+                f'A=M',
+                f'M=D',
+                f'@SP',
+                f'M=M+1',
+
+                f'@ARG',
+                f'D=M',
+                f'@SP',
+                f'A=M',
+                f'M=D',
+                f'@SP',
+                f'M=M+1',
+
+                f'@THIS',
+                f'D=M',
+                f'@SP',
+                f'A=M',
+                f'M=D',
+                f'@SP',
+                f'M=M+1',
+
+                f'@THAT',
+                f'D=M',
+                f'@SP',
+                f'A=M',
+                f'M=D',
+                f'@SP',
+                f'M=M+1',
+                f'@{int(command_breakdown[2]) + 5}',
+                f'D=A',
+                f'@SP',
+                f'D=M-D',
+                f'@ARG',
+                f'M=D',
+
+                f'@{command_breakdown[1]}',
+                f'0;JMP',
+
+                f'({command_breakdown[1]}$ret.{self.label_count})',
+            ])
+            self.label_count += 1
 
         for assembly_command in assembly:
             print(assembly_command)

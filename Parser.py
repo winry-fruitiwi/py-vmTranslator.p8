@@ -90,19 +90,12 @@ class Parser:
             "or",
             "not"
         ]
-        # C_LABEL, C_GOTO, C_IF, C_FUNCTION, C_RETURN, C_CALL are handled later
-
-        # we don't need this line because if we're not doing arithmetic,
-        # we must be doing memory access. We will need this later.
-        # memory_access_strings = ["push", "pop"]
-
-        # arithmetic
-
-        # for every element in arithmetic_strings, if it matches the command,
-        # return "C_ARITHMETIC" later on in the code.
-        math = [ele for ele in arithmetic_strings if (ele in stripped_line)]
 
         try:
+            # for every element in arithmetic_strings, if it matches the
+            # command, return "C_ARITHMETIC" later on in the code.
+            math = [ele for ele in arithmetic_strings if
+                    (stripped_line.index(ele) == 0)]
             if math:
                 return Command(0)
         except ValueError:
@@ -135,6 +128,24 @@ class Parser:
         try:
             if stripped_line.index("if-goto") == 0:
                 return Command(5)
+        except ValueError:
+            pass
+
+        try:
+            if stripped_line.index("function") == 0:
+                return Command(6)
+        except ValueError:
+            pass
+
+        try:
+            if stripped_line.index("return") == 0:
+                return Command(7)
+        except ValueError:
+            pass
+
+        try:
+            if stripped_line.index("call") == 0:
+                return Command(8)
         except ValueError:
             pass
 

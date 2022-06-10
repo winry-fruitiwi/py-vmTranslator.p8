@@ -2,7 +2,7 @@ from CodeWriter import CodeWriter
 from Parser import Parser, Command
 
 code_writer = CodeWriter()
-parser = Parser("SimpleFunction/SimpleFunction.vm")
+parser = Parser("NestedCall/Sys.vm")
 
 while parser.has_more_commands():
     current_line = parser.currentLine
@@ -14,23 +14,32 @@ while parser.has_more_commands():
     # if the command type was push or pop, translate using the memory access
     # protocol. Now uses enums to help distinguish between command types.
     if (
-            parser.command_type() == Command.C_POP or
-            parser.command_type() == Command.C_PUSH
+            command_type == Command.C_POP or
+            command_type == Command.C_PUSH
     ):
         code_writer.translate_mem_access(current_line)
 
     # latest bug: did not even try translating C_ARITHMETIC :p
-    if parser.command_type() == Command.C_ARITHMETIC:
+    if command_type == Command.C_ARITHMETIC:
         code_writer.translate_arithmetic(current_line)
+
+    # if the command type is label, if (if-goto), or goto, translate using the
+    # branching protocol. The function will handle its values inside itself.
+    if (
+            command_type == Command.C_LABEL or
+            command_type == Command.C_IF or
+            command_type == Command.C_GOTO
+    ):
+        code_writer.translate_branching(current_line)
 
     # if the command time is label, if (if-goto), or goto, translate using the
     # branching protocol. The function will handle its values inside itself.
     if (
-            parser.command_type() == Command.C_LABEL or
-            parser.command_type() == Command.C_IF or
-            parser.command_type() == Command.C_GOTO
+            command_type == Command.C_FUNCTION or
+            command_type == Command.C_RETURN or
+            command_type == Command.C_CALL
     ):
-        code_writer.translate_branching(current_line)
+        code_writer.translate_function(current_line)
 
     # advance to avoid an infinite loop
     parser.advance()

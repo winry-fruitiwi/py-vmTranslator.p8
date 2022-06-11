@@ -14,7 +14,8 @@ class CodeWriter:
 
     # translates arithmetic code, with a command type of C_ARITHMETIC.
     def translate_arithmetic(self, command):
-        assembly = [f'\n// {command}']
+        # assembly = [f'\n// {command}']
+        assembly = []
 
         # if the command is negative:
         if command == "neg":
@@ -167,7 +168,8 @@ class CodeWriter:
     # translates memory access code, with command types of C_PUSH and C_POP.
     def translate_mem_access(self, command):
         command_breakdown = command.split(" ")
-        assembly = [f'\n// {command}']
+        # assembly = [f'\n// {command}']
+        assembly = []
 
         # a shorter name for command_breakdown[2]
         i = command_breakdown[2]
@@ -410,7 +412,9 @@ class CodeWriter:
     # translates branching commands
     def translate_branching(self, command):
         command_breakdown = command.split(" ")
-        assembly = [f'\n// {command}']
+        # assembly = [f'\n// {command}']
+        assembly = []
+
         if command_breakdown[0] == "label":
             assembly.extend([
                             f'(functionName${command_breakdown[1]})'
@@ -437,7 +441,8 @@ class CodeWriter:
     # translates function, call, and return commands
     def translate_function(self, command):
         command_breakdown = command.split(" ")
-        assembly = [f'\n// {command}']
+        # assembly = [f'\n// {command}']
+        assembly = []
 
         if command_breakdown[0] == "function":
             n_vars = int(command_breakdown[2])

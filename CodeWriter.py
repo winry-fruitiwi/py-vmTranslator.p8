@@ -161,7 +161,12 @@ class CodeWriter:
             ])
             self.comp_num += 1
 
-        for assembly_command in assembly:
+        for assembly_index in range(0, len(assembly)):
+            assembly_command = assembly[assembly_index]
+
+            # if assembly_index == 0:
+            #     assembly_command = "— " + assembly_command
+
             print(assembly_command)
 
     # translates memory access code, with command types of C_PUSH and C_POP.
@@ -404,7 +409,12 @@ class CodeWriter:
                                     "M=D"
                                     ])
 
-        for assembly_command in assembly:
+        for assembly_index in range(0, len(assembly)):
+            assembly_command = assembly[assembly_index]
+
+            # if assembly_index == 0:
+            #     assembly_command = "— " + assembly_command
+
             print(assembly_command)
 
     # translates branching commands
@@ -431,7 +441,12 @@ class CodeWriter:
                             f'D;JNE'
                             ])
 
-        for assembly_command in assembly:
+        for assembly_index in range(0, len(assembly)):
+            assembly_command = assembly[assembly_index]
+
+            # if assembly_index == 0:
+            #     assembly_command = "— " + assembly_command
+
             print(assembly_command)
 
     # translates function, call, and return commands
@@ -468,11 +483,11 @@ class CodeWriter:
                 f'@R13',
                 f'M=D',
 
-                f'@R14',    # retAddress = *(endFrame - 5)
+                f'@returnAddress',    # retAddress = *(endFrame - 5)
                 f'M=D',
                 f'@5',
                 f'D=A',
-                f'@R14',
+                f'@returnAddress',
                 f'M=M-D',
 
                 f'@SP',     # *ARG = pop()
@@ -511,7 +526,7 @@ class CodeWriter:
                 f'@LCL',
                 f'M=D',
 
-                f'@R14',    # goto retAddress
+                f'@returnAddress',    # goto retAddress
                 f'A=M',
                 f'0;JMP'
             ])
@@ -573,6 +588,9 @@ class CodeWriter:
 
         for assembly_index in range(0, len(assembly)):
             assembly_command = assembly[assembly_index]
+
+            # if assembly_index == 0:
+            #     assembly_command = "— " + assembly_command
 
             print(assembly_command)
 

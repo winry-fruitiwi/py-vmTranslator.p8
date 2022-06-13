@@ -2,7 +2,7 @@
 @SP
 A=M
 M=0
-@4000	
+@4000
 D=A
 @SP
 A=M
@@ -322,11 +322,11 @@ M=M+1
 D=M
 @R13
 M=D
-@R14
+@returnAddress
 M=D
 @5
 D=A
-@R14
+@returnAddress
 M=M-D
 @SP
 AM=M-1
@@ -358,7 +358,7 @@ AM=M-1
 D=M
 @LCL
 M=D
-@R14
+@returnAddress
 A=M
 0;JMP
 (Sys.add12)
@@ -411,11 +411,11 @@ M=M+1
 D=M
 @R13
 M=D
-@R14
+@returnAddress
 M=D
 @5
 D=A
-@R14
+@returnAddress
 M=M-D
 @SP
 AM=M-1
@@ -447,6 +447,6 @@ AM=M-1
 D=M
 @LCL
 M=D
-@R14
+@returnAddress
 A=M
 0;JMP

@@ -2,7 +2,7 @@ from CodeWriter import CodeWriter
 from Parser import Parser, Command
 
 code_writer = CodeWriter()
-parser = Parser("NestedCall/Sys.vm")
+parser = Parser("vm/StaticTest.vm")
 
 while parser.has_more_commands():
     current_line = parser.currentLine
@@ -19,7 +19,7 @@ while parser.has_more_commands():
     ):
         code_writer.translate_mem_access(current_line)
 
-    # latest bug: did not even try translating C_ARITHMETIC :p
+    # if the command type is arithmetic, translate using the arithmetic protocol
     if command_type == Command.C_ARITHMETIC:
         code_writer.translate_arithmetic(current_line)
 
@@ -32,8 +32,8 @@ while parser.has_more_commands():
     ):
         code_writer.translate_branching(current_line)
 
-    # if the command time is label, if (if-goto), or goto, translate using the
-    # branching protocol. The function will handle its values inside itself.
+    # if the command type is function, return, or call, translate using the
+    # function protocol.
     if (
             command_type == Command.C_FUNCTION or
             command_type == Command.C_RETURN or

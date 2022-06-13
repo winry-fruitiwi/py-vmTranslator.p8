@@ -14,7 +14,7 @@ class CodeWriter:
 
     # translates arithmetic code, with a command type of C_ARITHMETIC.
     def translate_arithmetic(self, command):
-        assembly = []
+        assembly = [f"\n// {command}"]
 
         # if the command is negative:
         if command == "neg":
@@ -111,52 +111,52 @@ class CodeWriter:
 
         elif command == "lt":
             assembly.extend([
-                "@SP"                            # goto sp
-                "AM=M-1"                         # decrement sp, select *(SP)
-                "D=M"                            # D=*(SP)
-                "@SP"                            # goto SP
-                "A=M-1"                          # select *(SP-1)
-                "D=M-D"                          # D=*(SP-1)-*(SP)
-                f"@JUMP{self.comp_num}.TRUE"     # if D<0, jump to JUMP.TRUE
-                "D;JLT"                          
-                f"@JUMP{self.comp_num}.FALSE"    # else, jump to JUMP.FALSE
-                "0;JMP"                          
-                f"(JUMP{self.comp_num}.TRUE)"    # set SP-1 to true (-1)
-                "@SP"                            
-                "A=M-1"                         
-                "M=-1"                           
-                f"@EN{self.comp_num}D"           # don't set SP-1 to false (0)
-                "0;JMP"                          
-                f"(JUMP{self.comp_num}.FALSE)"   # set SP-1 to false (0)
-                "@SP"                            
-                "A=M-1"                          
-                "M=0"                            
+                "@SP",                            # goto sp
+                "AM=M-1",                         # decrement sp, select *(SP)
+                "D=M",                            # D=*(SP)
+                "@SP",                            # goto SP
+                "A=M-1",                          # select *(SP-1)
+                "D=M-D",                          # D=*(SP-1)-*(SP)
+                f"@JUMP{self.comp_num}.TRUE",     # if D<0, jump to JUMP.TRUE
+                "D;JLT",
+                f"@JUMP{self.comp_num}.FALSE",    # else, jump to JUMP.FALSE
+                "0;JMP",
+                f"(JUMP{self.comp_num}.TRUE)",    # set SP-1 to true (-1)
+                "@SP",
+                "A=M-1",
+                "M=-1",
+                f"@EN{self.comp_num}D",           # don't set SP-1 to false (0)
+                "0;JMP",
+                f"(JUMP{self.comp_num}.FALSE)",   # set SP-1 to false (0)
+                "@SP",
+                "A=M-1",
+                "M=0",
                 f"(EN{self.comp_num}D)\n"        # end of command
                 ])
             self.comp_num += 1
 
         elif command == "gt":
             assembly.extend([
-                "@SP"                            # goto sp
-                "AM=M-1"                         # decrement sp, select *(SP)
-                "D=M"                            # D=*(SP)
-                "@SP"                            # goto SP
-                "A=M-1"                          # select *(SP-1)
-                "D=M-D"                          # D=*(SP-1)-*(SP)
-                f"@JUMP{self.comp_num}.TRUE"     # if D>0, jump to JUMP.TRUE
-                "D;JGT"
-                f"@JUMP{self.comp_num}.FALSE"    # else, jump to JUMP.FALSE
-                "0;JMP"
-                f"(JUMP{self.comp_num}.TRUE)"    # set SP-1 to true (-1)
-                "@SP"
-                "A=M-1"
-                "M=-1"
-                f"@EN{self.comp_num}D"           # don't set SP-1 to false (0)
-                "0;JMP"
-                f"(JUMP{self.comp_num}.FALSE)"   # set SP-1 to false (0)
-                "@SP"
-                "A=M-1"
-                "M=0"
+                "@SP",                            # goto sp
+                "AM=M-1",                         # decrement sp, select *(SP)
+                "D=M",                            # D=*(SP)
+                "@SP",                            # goto SP
+                "A=M-1",                          # select *(SP-1)
+                "D=M-D",                          # D=*(SP-1)-*(SP)
+                f"@JUMP{self.comp_num}.TRUE",     # if D>0, jump to JUMP.TRUE
+                "D;JGT",
+                f"@JUMP{self.comp_num}.FALSE",    # else, jump to JUMP.FALSE
+                "0;JMP",
+                f"(JUMP{self.comp_num}.TRUE)",    # set SP-1 to true (-1)
+                "@SP",
+                "A=M-1",
+                "M=-1",
+                f"@EN{self.comp_num}D",           # don't set SP-1 to false (0)
+                "0;JMP",
+                f"(JUMP{self.comp_num}.FALSE)",   # set SP-1 to false (0)
+                "@SP",
+                "A=M-1",
+                "M=0",
                 f"(EN{self.comp_num}D)\n"        # end of command
             ])
             self.comp_num += 1
@@ -172,7 +172,7 @@ class CodeWriter:
     # translates memory access code, with command types of C_PUSH and C_POP.
     def translate_mem_access(self, command):
         command_breakdown = command.split(" ")
-        assembly = []
+        assembly = [f"\n// {command}"]
 
         # a shorter name for command_breakdown[2]
         i = command_breakdown[2]
@@ -420,7 +420,8 @@ class CodeWriter:
     # translates branching commands
     def translate_branching(self, command):
         command_breakdown = command.split(" ")
-        assembly = []
+        assembly = [f"\n// {command}"]
+
         if command_breakdown[0] == "label":
             assembly.extend([
                             f'(functionName${command_breakdown[1]})'
@@ -452,13 +453,19 @@ class CodeWriter:
     # translates function, call, and return commands
     def translate_function(self, command):
         command_breakdown = command.split(" ")
-        assembly = []
+        assembly = [f"\n// {command}"]
 
         if command_breakdown[0] == "function":
             n_vars = int(command_breakdown[2])
 
             assembly.extend([
                 f'({command_breakdown[1]})',
+            ])
+
+            assembly.extend([
+                f'@SP',
+                f'A=M',
+                f'M=0'
             ])
 
             for i in range(0, n_vars):
@@ -469,12 +476,6 @@ class CodeWriter:
                     f'@SP',
                     f'M=M+1'
                 ])
-
-            assembly.extend([
-                f'@SP',
-                f'A=M',
-                f'M=0'
-            ])
 
         elif command_breakdown[0] == "return":
             assembly.extend([

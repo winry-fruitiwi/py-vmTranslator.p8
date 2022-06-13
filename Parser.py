@@ -79,28 +79,10 @@ class Parser:
     # determines type of command
     def command_type(self):
         stripped_line = self.currentLine.strip(" ").strip("\n")
-        arithmetic_strings = [
-            "add",
-            "sub",
-            "neg",
-            "eq",
-            "gt",
-            "lt",
-            "and",
-            "or",
-            "not"
-        ]
 
-        try:
-            # for every element in arithmetic_strings, if it matches the
-            # command, return "C_ARITHMETIC" later on in the code.
-            math = [ele for ele in arithmetic_strings if
-                    (stripped_line.index(ele) == 0)]
-            if math:
-                return Command(0)
-        except ValueError:
-            pass
-
+        # is the type of the command push, pop, label, goto, if-goto, function,
+        # return, or call? If none of these are true then the type must be
+        # arithmetic. If it's not then I'll also have an error.
         try:
             if stripped_line.index("push") == 0:
                 return Command(1)
@@ -147,7 +129,7 @@ class Parser:
             if stripped_line.index("call") == 0:
                 return Command(8)
         except ValueError:
-            pass
+            return Command(0)
 
     # find the first argument of the current line
     def arg1(self):

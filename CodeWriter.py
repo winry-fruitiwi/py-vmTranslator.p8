@@ -568,7 +568,7 @@ class CodeWriter:
                 'A=M-1',
                 'M=D',
 
-                f'@{int(command_breakdown[2]) + 5}',    # ARG=SP-5-nArgs
+                f'@{max(int(command_breakdown[2]), 1) + 5}',    # ARG=SP-5-nArgs
                 'D=A',
                 '@SP',
                 'D=M-D',

@@ -1,4 +1,3 @@
-
 // function Sys.init 0
 (Sys.init)
 
@@ -67,7 +66,7 @@ D=M
 M=M+1
 A=M-1
 M=D
-@5
+@6
 D=A
 @SP
 D=M-D

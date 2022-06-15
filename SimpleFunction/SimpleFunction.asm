@@ -1,15 +1,13 @@
 // function SimpleFunction.test 2
 (SimpleFunction.test)
 @SP
-A=M
+M=M+1
+A=M-1
 M=0
 @SP
 M=M+1
-@SP
-A=M
+A=M-1
 M=0
-@SP
-M=M+1
 
 // push local 0
 @0
@@ -104,14 +102,8 @@ M=M-1
 // return
 @LCL
 D=M
-@R13
+@endFrame
 M=D
-@R14
-M=D
-@5
-D=A
-@R14
-M=M-D
 @SP
 AM=M-1
 D=M
@@ -122,26 +114,27 @@ M=D
 D=M+1
 @SP
 M=D
-@R13
+@endFrame
 AM=M-1
 D=M
 @THAT
 M=D
-@R13
+@endFrame
 AM=M-1
 D=M
 @THIS
 M=D
-@R13
+@endFrame
 AM=M-1
 D=M
 @ARG
 M=D
-@R13
+@endFrame
 AM=M-1
 D=M
 @LCL
 M=D
-@R14
+@endFrame
+AM=M-1
 A=M
 0;JMP

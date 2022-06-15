@@ -2,7 +2,7 @@ from CodeWriter import CodeWriter
 from Parser import Parser, Command
 
 code_writer = CodeWriter()
-parser = Parser("vm/StaticTest.vm")
+parser = Parser("NestedCall/Sys.vm")
 
 while parser.has_more_commands():
     current_line = parser.currentLine

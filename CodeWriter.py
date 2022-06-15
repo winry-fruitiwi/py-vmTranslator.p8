@@ -12,6 +12,9 @@ class CodeWriter:
         # keep track of the call statement label count
         self.label_count = 0
 
+        # our current function, starts at Sys.init at all times
+        self.current_function = "Sys.init"
+
     # translates arithmetic code, with a command type of C_ARITHMETIC.
     def translate_arithmetic(self, command):
         assembly = [f"\n// {command}"]
@@ -424,12 +427,12 @@ class CodeWriter:
 
         if command_breakdown[0] == "label":
             assembly.extend([
-                            f'(functionName${command_breakdown[1]})'
+                            f'({command_breakdown[1]})'
                             ])
 
         if command_breakdown[0] == "goto":
             assembly.extend([
-                            f'@functionName${command_breakdown[1]}',
+                            f'@{command_breakdown[1]}',
                             f'0;JMP'
                             ])
 
@@ -438,7 +441,7 @@ class CodeWriter:
                             f'@SP',
                             f'AM=M-1',
                             f'D=M',
-                            f'@functionName${command_breakdown[1]}',
+                            f'@{command_breakdown[1]}',
                             f'D;JNE'
                             ])
 
@@ -462,128 +465,125 @@ class CodeWriter:
                 f'({command_breakdown[1]})',
             ])
 
-            assembly.extend([
-                f'@SP',
-                f'A=M',
-                f'M=0'
-            ])
-
             for i in range(0, n_vars):
                 assembly.extend([
-                    f'@SP',
-                    f'A=M',
-                    f'M=0',
-                    f'@SP',
-                    f'M=M+1'
+                    '@SP',
+                    'M=M+1',
+                    'A=M-1',
+                    'M=0'
                 ])
+
+            self.current_function = command_breakdown[1]
 
         elif command_breakdown[0] == "return":
             assembly.extend([
-                f'@LCL',    # endFrame = LCL
-                f'D=M',
-                f'@R13',
-                f'M=D',
+                '@LCL',    # endFrame = LCL
+                'D=M',
+                '@endFrame',    # (R13) FIXME store in a variable
+                'M=D',
 
-                f'@returnAddress',    # retAddress = *(endFrame - 5)
-                f'M=D',
-                f'@5',
-                f'D=A',
-                f'@returnAddress',
-                f'M=M-D',
+                '@SP',     # *ARG = pop()
+                'AM=M-1',
+                'D=M',
+                '@ARG',
+                'A=M',
+                'M=D',
 
-                f'@SP',     # *ARG = pop()
-                f'AM=M-1',
-                f'D=M',
-                f'@ARG',
-                f'A=M',
-                f'M=D',
+                '@ARG',    # SP=ARG+1
+                'D=M+1',
+                '@SP',
+                'M=D',
 
-                f'@ARG',    # SP=ARG+1
-                f'D=M+1',
-                f'@SP',
-                f'M=D',
+                '@endFrame',    # THAT=*(endFrame-1), endFrame--
+                'AM=M-1',
+                'D=M',
+                '@THAT',
+                'M=D',
 
-                f'@R13',    # THAT=*(endFrame-1)
-                f'AM=M-1',
-                f'D=M',
-                f'@THAT',
-                f'M=D',
+                '@endFrame',    # THIS=*(endFrame-1), endFrame--
+                'AM=M-1',
+                'D=M',
+                '@THIS',
+                'M=D',
 
-                f'@R13',    # THIS=*(endFrame-1)
-                f'AM=M-1',
-                f'D=M',
-                f'@THIS',
-                f'M=D',
+                '@endFrame',    # ARG=*(endFrame-1), endFrame--
+                'AM=M-1',
+                'D=M',
+                '@ARG',
+                'M=D',
 
-                f'@R13',    # ARG=*(endFrame-1)
-                f'AM=M-1',
-                f'D=M',
-                f'@ARG',
-                f'M=D',
+                '@endFrame',    # LCL=*(endFrame-1), endFrame--
+                'AM=M-1',
+                'D=M',
+                '@LCL',
+                'M=D',
 
-                f'@R13',    # LCL=*(endFrame-1)
-                f'AM=M-1',
-                f'D=M',
-                f'@LCL',
-                f'M=D',
-
-                f'@returnAddress',    # goto retAddress
-                f'A=M',
-                f'0;JMP'
+                '@endFrame',
+                'AM=M-1',
+                'A=M',
+                '0;JMP'
             ])
 
         elif command_breakdown[0] == "call":
+            self.current_function = command_breakdown[1]
+
             assembly.extend([
-                f'@returnAddress',
-                f'D=A',
-                f'@SP',
-                f'A=M',
-                f'M=D',
-                f'@SP',
-                f'M=M+1',
+                # max(1-numArgs, 0) for 0 args: max(1-0, 0) = 1
+                # max(1-numArgs, 0) for 1 args: max(1-1, 0) = 0
+                '@SP',
+                ('M=M+1' if max(1-int(command_breakdown[2]), 0) else ''),
 
-                f'@LCL',
-                f'D=M',
-                f'@SP',
-                f'A=M',
-                f'M=D',
-                f'@SP',
-                f'M=M+1',
+                f'@$ret.{self.label_count}',        # push returnAddress (R15)
+                'D=A',
+                '@SP',
+                'M=M+1',
+                'A=M-1',
+                'M=D',
 
-                f'@ARG',
-                f'D=M',
-                f'@SP',
-                f'A=M',
-                f'M=D',
-                f'@SP',
-                f'M=M+1',
+                '@LCL',        # push LCL
+                'D=M',
+                '@SP',
+                'M=M+1',
+                'A=M-1',
+                'M=D',
 
-                f'@THIS',
-                f'D=M',
-                f'@SP',
-                f'A=M',
-                f'M=D',
-                f'@SP',
-                f'M=M+1',
+                '@ARG',        # push ARG
+                'D=M',
+                '@SP',
+                'M=M+1',
+                'A=M-1',
+                'M=D',
 
-                f'@THAT',
-                f'D=M',
-                f'@SP',
-                f'A=M',
-                f'M=D',
-                f'@SP',
-                f'M=M+1',
-                f'@{int(command_breakdown[2]) + 5}',
-                f'D=A',
-                f'@SP',
-                f'D=M-D',
-                f'@ARG',
-                f'M=D',
+                '@THIS',       # push THIS
+                'D=M',
+                '@SP',
+                'M=M+1',
+                'A=M-1',
+                'M=D',
 
-                f'@{command_breakdown[1]}',
-                f'0;JMP',
+                '@THAT',       # push THAT
+                'D=M',
+                '@SP',
+                'M=M+1',
+                'A=M-1',
+                'M=D',
 
-                f'({command_breakdown[1]}$ret.{self.label_count})',
+                f'@{int(command_breakdown[2]) + 5}',    # ARG=SP-5-nArgs
+                'D=A',
+                '@SP',
+                'D=M-D',
+                '@ARG',
+                'M=D',
+
+                '@SP',         # LCL = SP
+                'D=M',
+                '@LCL',
+                'M=D',
+
+                f'@{command_breakdown[1]}',        # goto functionName
+                '0;JMP',
+
+                f'($ret.{self.label_count})'
             ])
             self.label_count += 1
 

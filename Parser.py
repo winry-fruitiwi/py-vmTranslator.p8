@@ -14,11 +14,21 @@ class Command(Enum):
     C_CALL = 8
 
 
-# this parses the input file and hands it to a currently nonexistent CodeWriter
+# this parses the input file
 class Parser:
-    def __init__(self, file):
+    def __init__(self, file_list, directory_name):
+        # make the file list and directory name arguments instance fields.
+        self.file_list = file_list
+        self.directory_name = directory_name
+
+        # the current file's index in the file list.
+        self.current_file_index = 0
+
+        # the current file's name.
+        self.file_name = file_list[self.current_file_index]
+
         # opens the input file.
-        lines = open(file, "r")
+        lines = open(f'{directory_name}/{self.file_name}', "r")
         line_array = lines.readlines()
         self.currentLineIndex = 0
         self.lines = []
@@ -50,7 +60,6 @@ class Parser:
 
         # we only need the file array, not the file itself, so we can close it.
         lines.close()
-        # print(self.lines)
 
     # read the input file.
     def read_file(self):
@@ -72,9 +81,60 @@ class Parser:
         except IndexError:
             pass
 
-    # check if there are more lines to read.
+    # check if there are more lines to read in the current file.
+    # If there are no more, check if there are more files to read, and switch
+    # to them if possible.
     def has_more_commands(self):
-        return self.currentLineIndex <= len(self.lines) - 1
+        # number of files in file list
+        max_file_index = len(self.file_list) - 1
+
+        if self.currentLineIndex <= len(self.lines) - 1:
+            return True
+        else:
+            if self.current_file_index + 1 > max_file_index:
+                return False
+            else:
+                print()
+                self.current_file_index += 1
+                # the current file's name.
+                self.file_name = self.file_list[self.current_file_index]
+
+                # opens the input file.
+                lines = open(f'{self.directory_name}/{self.file_name}', "r")
+                line_array = lines.readlines()
+                self.currentLineIndex = 0
+                self.lines = []
+
+                # now it's time to clean up self.lines!
+                for line in line_array:
+                    stripped_line = line.strip(" ").strip("\n")
+                    try:
+                        # if the line is a comment or whitespace, move on.
+                        if len(line) == 1:
+                            # print("filtered!")
+                            continue
+                        if stripped_line.index("//") == 0:
+                            continue
+
+                        if stripped_line.index("//") > 0:
+                            stripped_line = stripped_line[0:line.index("//")]
+
+                    except IndexError:
+                        # print("filtered!")
+                        continue
+                    except ValueError:
+                        pass
+
+                    self.lines.append(stripped_line)
+
+                # the current line is whatever is at the current line index.
+                self.currentLine = self.lines[self.currentLineIndex]
+
+                # we only need the file array, not the file itself, so we can
+                # close it.
+                lines.close()
+
+                return True
 
     # determines type of command
     def command_type(self):

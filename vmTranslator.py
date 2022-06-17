@@ -2,16 +2,25 @@ import os
 from CodeWriter import CodeWriter
 from Parser import Parser, Command
 
+current_directory = "StaticsTest"
 code_writer = CodeWriter()
-parser = Parser("NestedCall/Sys.vm")
-
-file_path = os.listdir("./StaticsTest")
+directory_file_list = os.listdir(f"./{current_directory}")
 # file_path = os.listdir("./FibonacciSeries") # change for specific file
+# list of VM files in current_directory
+vm_files = []
 
-for file in file_path:
+for file in directory_file_list:
     # check the last 3 indices of file. If they equal ".vm", print file.
     if file[-3:] == ".vm":
-        print(file)
+        # appends the file name to the list
+        vm_files.append(file)
+
+print(vm_files)
+
+parser = Parser(vm_files, current_directory)
+
+while parser.has_more_commands():
+    parser.read_current_line()
 
 # currently commenting out for testing in isolation
 # while parser.has_more_commands():

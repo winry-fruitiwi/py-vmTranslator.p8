@@ -479,7 +479,7 @@ class CodeWriter:
             assembly.extend([
                 '@LCL',    # endFrame = LCL
                 'D=M',
-                '@endFrame',    # (R13) FIXME store in a variable
+                '@endFrame',
                 'M=D',
 
                 '@SP',     # *ARG = pop()

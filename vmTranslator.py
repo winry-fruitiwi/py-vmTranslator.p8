@@ -5,11 +5,13 @@ from Parser import Parser, Command
 code_writer = CodeWriter()
 parser = Parser("NestedCall/Sys.vm")
 
-file_path = os.listdir(".")
+file_path = os.listdir("./StaticsTest")
 # file_path = os.listdir("./FibonacciSeries") # change for specific file
 
 for file in file_path:
-    print(file)
+    # check the last 3 indices of file. If they equal ".vm", print file.
+    if file[-3:] == ".vm":
+        print(file)
 
 # currently commenting out for testing in isolation
 # while parser.has_more_commands():

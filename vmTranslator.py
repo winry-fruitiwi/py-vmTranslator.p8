@@ -2,6 +2,8 @@ import os
 from CodeWriter import CodeWriter
 from Parser import Parser, Command
 
+file = open("output.asm", "w")
+
 current_directory = "FibonacciElement"
 code_writer = CodeWriter()
 directory_file_list = os.listdir(f"./{current_directory}")

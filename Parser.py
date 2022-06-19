@@ -95,6 +95,7 @@ class Parser:
                 return False
             else:
                 print()
+                print("// file change!")
                 self.current_file_index += 1
                 # the current file's name.
                 self.file_name = self.file_list[self.current_file_index]

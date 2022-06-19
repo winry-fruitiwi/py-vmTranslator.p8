@@ -4,7 +4,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>NestedCall.tst &mdash; Nand2Tetris Calling Convention Test</title>
 	<style type="text/css">
-	.code {font-family:"Courier New", Courier, monospace; font-size:90%;}	
+	.code {font-family:"Courier New", Courier, monospace; font-size:90%;}
+    * {background-color: black; color: #dddd}	
 	pre {margin-left:2em;}
 	</style>
 </head>
@@ -40,7 +41,7 @@ The test setup also initializes the LCL, ARG, THIS and THAT pointers to -1, -2, 
 
 <span class="code">THIS</span> and <span class="code">THAT</span> are set to known values so that context save and restore can be tested.
 <p>
-Sys.init() calls Sys.main() and stores the return value in <span class="code">temp 1</span>.  This tests call to and
+Sys.init() calls Sys.main() and stores the return value in <span class="code">temp 1</span>.  This tests call to and 
 return from a function with no arguments.
 
 <h4>Sys.main()</h4>
@@ -115,7 +116,7 @@ example:<br>
 &emsp;&bull;&ensp;set a PC breakpoint at the ROM address for <span class="code">(Sys.main)</span>,<br>
 &emsp;&bull;&ensp;hit the run button.<br>
 When the CPU Emulator stops at the breakpoint you can inspect the RAM to check the stack and pointers values.
-(If the breakpoint isn't hit, you will need to single-step debug through
+(If the breakpoint isn't hit, you will need to to single-step debug through 
 your calling code to see why it didn't get there.)
 <p>
 Other useful places to set breakpoints are the entry points to the other functions and at the 
@@ -189,7 +190,7 @@ D=-A
 ($3)
 @SP
 </pre>
-Note that comments in the VM source become double comments. Looking ahead, in Project 11 you will be asked to write a compiler for the Jack language. If your compiler will write the Jack source lines as comments in the
+Note that comments in the VM source become double comments. Looking ahead, in Project 11 you will be asked to write a compiler for the Jack language. If your compiler will write the Jack source lines as comments in the 
 generated VM files, this convention will be quite useful.
 
 </body>

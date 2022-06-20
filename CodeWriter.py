@@ -5,9 +5,9 @@
 # noinspection GrazieInspection
 
 class CodeWriter:
-    def __init__(self):
+    def __init__(self, directory_name):
         # opens output file
-        self.file = open("./output.asm", "w")
+        self.file = open(f"./{directory_name}/{directory_name}.asm", "w")
 
         # keep track of the comparisons, which have labels
         self.comp_num = 0

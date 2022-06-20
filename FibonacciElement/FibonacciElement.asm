@@ -90,10 +90,10 @@ D;JNE
 @IF_FALSE
 0;JMP
 
-// label IF_TRUE
+// label IF_TRUE          
 (IF_TRUE)
 
-// push argument 0
+// push argument 0        
 @0
 D=A
 @ARG
@@ -106,7 +106,7 @@ M=D
 @SP
 M=M+1
 
-// push argument 0
+// push argument 0        
 
 // return
 @LCL
@@ -148,7 +148,7 @@ AM=M-1
 A=M
 0;JMP
 
-// label IF_FALSE
+// label IF_FALSE         
 (IF_FALSE)
 
 // push argument 0
@@ -177,7 +177,7 @@ M=M+1
 
 // push constant 2
 
-// call Main.fibonacci 1
+// call Main.fibonacci 1  
 @SP
 
 @$ret.1
@@ -250,7 +250,7 @@ M=M+1
 
 // push constant 1
 
-// call Main.fibonacci 1
+// call Main.fibonacci 1  
 @SP
 
 @$ret.2
@@ -337,7 +337,6 @@ AM=M-1
 A=M
 0;JMP
 
-
 // function Sys.init 0
 (Sys.init)
 
@@ -352,7 +351,7 @@ M=M+1
 
 // push constant 4
 
-// call Main.fibonacci 1
+// call Main.fibonacci 1   
 @SP
 
 @$ret.3
@@ -402,6 +401,7 @@ M=D
 // label WHILE
 (WHILE)
 
-// goto WHILE
+// goto WHILE              
 @WHILE
 0;JMP
+

@@ -6,6 +6,9 @@
 
 class CodeWriter:
     def __init__(self):
+        # opens output file
+        self.file = open("./output.asm", "w")
+
         # keep track of the comparisons, which have labels
         self.comp_num = 0
 
@@ -17,7 +20,7 @@ class CodeWriter:
 
     # translates arithmetic code, with a command type of C_ARITHMETIC.
     def translate_arithmetic(self, command):
-        assembly = [f"\n// {command}"]
+        assembly = [f"// {command}"]
 
         # if the command is negative:
         if command == "neg":
@@ -164,18 +167,20 @@ class CodeWriter:
             ])
             self.comp_num += 1
 
-        for assembly_index in range(0, len(assembly)):
-            assembly_command = assembly[assembly_index]
+        # for assembly_index in range(0, len(assembly)):
+        #     assembly_command = assembly[assembly_index]
+        #
+        #     # if assembly_index == 0:
+        #     #     assembly_command = "— " + assembly_command
+        #
+        #     print(assembly_command)
 
-            # if assembly_index == 0:
-            #     assembly_command = "— " + assembly_command
-
-            print(assembly_command)
+        return assembly
 
     # translates memory access code, with command types of C_PUSH and C_POP.
     def translate_mem_access(self, command):
         command_breakdown = command.split(" ")
-        assembly = [f"\n// {command}"]
+        assembly = [f"// {command}"]
 
         # a shorter name for command_breakdown[2]
         i = command_breakdown[2]
@@ -412,18 +417,20 @@ class CodeWriter:
                                     "M=D"
                                     ])
 
-        for assembly_index in range(0, len(assembly)):
-            assembly_command = assembly[assembly_index]
+        # for assembly_index in range(0, len(assembly)):
+        #     assembly_command = assembly[assembly_index]
+        #
+        #     # if assembly_index == 0:
+        #     #     assembly_command = "— " + assembly_command
+        #
+        #     print(assembly_command)
 
-            # if assembly_index == 0:
-            #     assembly_command = "— " + assembly_command
-
-            print(assembly_command)
+        return assembly
 
     # translates branching commands
     def translate_branching(self, command):
         command_breakdown = command.split(" ")
-        assembly = [f"\n// {command}"]
+        assembly = [f"// {command}"]
 
         if command_breakdown[0] == "label":
             assembly.extend([
@@ -445,18 +452,20 @@ class CodeWriter:
                             f'D;JNE'
                             ])
 
-        for assembly_index in range(0, len(assembly)):
-            assembly_command = assembly[assembly_index]
+        # for assembly_index in range(0, len(assembly)):
+        #     assembly_command = assembly[assembly_index]
+        #
+        #     # if assembly_index == 0:
+        #     #     assembly_command = "— " + assembly_command
+        #
+        #     print(assembly_command)
 
-            # if assembly_index == 0:
-            #     assembly_command = "— " + assembly_command
-
-            print(assembly_command)
+        return assembly
 
     # translates function, call, and return commands
     def translate_function(self, command):
         command_breakdown = command.split(" ")
-        assembly = [f"\n// {command}"]
+        assembly = [f"// {command}"]
 
         if command_breakdown[0] == "function":
             n_vars = int(command_breakdown[2])
@@ -587,13 +596,19 @@ class CodeWriter:
             ])
             self.label_count += 1
 
-        for assembly_index in range(0, len(assembly)):
-            assembly_command = assembly[assembly_index]
+        # for assembly_index in range(0, len(assembly)):
+        #     assembly_command = assembly[assembly_index]
+        #
+        #     # if assembly_index == 0:
+        #     #     assembly_command = "— " + assembly_command
+        #
+        #     print(assembly_command)
 
-            # if assembly_index == 0:
-            #     assembly_command = "— " + assembly_command
+        return assembly
 
-            print(assembly_command)
+    # writes a list of strings into current output file
+    def write_lines(self, lines):
+        self.file.write("\n".join(lines) + "\n")
 
     # the specs say that we need to close the output file, but I'm not writing
     # into it during this project because I'm not opening the output file!

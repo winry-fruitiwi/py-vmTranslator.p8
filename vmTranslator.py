@@ -6,7 +6,10 @@ current_directory = "FibonacciElement"
 code_writer = CodeWriter()
 directory_file_list = os.listdir(f"./{current_directory}")
 
-code_writer.write_lines(code_writer.translate_branching("label hello"))
+code_writer.translate_branching("label hello")
+code_writer.translate_mem_access("push constant 2")
+code_writer.translate_arithmetic("add")
+code_writer.translate_function("function Sys.init 10")
 
 # code is temporarily commented out for testing purposes
 #

@@ -167,15 +167,9 @@ class CodeWriter:
             ])
             self.comp_num += 1
 
-        # for assembly_index in range(0, len(assembly)):
-        #     assembly_command = assembly[assembly_index]
-        #
-        #     # if assembly_index == 0:
-        #     #     assembly_command = "— " + assembly_command
-        #
-        #     print(assembly_command)
+        # return assembly
 
-        return assembly
+        self.write_lines(assembly)
 
     # translates memory access code, with command types of C_PUSH and C_POP.
     def translate_mem_access(self, command):
@@ -417,15 +411,9 @@ class CodeWriter:
                                     "M=D"
                                     ])
 
-        # for assembly_index in range(0, len(assembly)):
-        #     assembly_command = assembly[assembly_index]
-        #
-        #     # if assembly_index == 0:
-        #     #     assembly_command = "— " + assembly_command
-        #
-        #     print(assembly_command)
+        # return assembly
 
-        return assembly
+        self.write_lines(assembly)
 
     # translates branching commands
     def translate_branching(self, command):
@@ -452,15 +440,9 @@ class CodeWriter:
                             f'D;JNE'
                             ])
 
-        # for assembly_index in range(0, len(assembly)):
-        #     assembly_command = assembly[assembly_index]
-        #
-        #     # if assembly_index == 0:
-        #     #     assembly_command = "— " + assembly_command
-        #
-        #     print(assembly_command)
+        # return assembly
 
-        return assembly
+        self.write_lines(assembly)
 
     # translates function, call, and return commands
     def translate_function(self, command):
@@ -596,19 +578,13 @@ class CodeWriter:
             ])
             self.label_count += 1
 
-        # for assembly_index in range(0, len(assembly)):
-        #     assembly_command = assembly[assembly_index]
-        #
-        #     # if assembly_index == 0:
-        #     #     assembly_command = "— " + assembly_command
-        #
-        #     print(assembly_command)
+        # return assembly
 
-        return assembly
+        self.write_lines(assembly)
 
     # writes a list of strings into current output file
     def write_lines(self, lines):
-        self.file.write("\n".join(lines) + "\n")
+        self.file.write("\n".join(lines) + "\n\n")
 
     # the specs say that we need to close the output file, but I'm not writing
     # into it during this project because I'm not opening the output file!

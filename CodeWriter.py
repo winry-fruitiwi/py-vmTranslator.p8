@@ -509,7 +509,7 @@ class CodeWriter:
                 '@LCL',
                 'M=D',
 
-                '@endFrame',
+                '@endFrame',    # retAddr=*(endFrame-1), endFrame--, goto rA
                 'AM=M-1',
                 'A=M',
                 '0;JMP'

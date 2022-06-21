@@ -3,15 +3,15 @@ from enum import Enum
 
 
 class Command(Enum):
-    C_ARITHMETIC = 0
-    C_PUSH = 1
-    C_POP = 2
-    C_LABEL = 3
-    C_GOTO = 4
-    C_IF = 5
-    C_FUNCTION = 6
-    C_RETURN = 7
-    C_CALL = 8
+    ARITHMETIC = 0
+    PUSH = 1
+    POP = 2
+    LABEL = 3
+    GOTO = 4
+    IF = 5
+    FUNCTION = 6
+    RETURN = 7
+    CALL = 8
 
 
 # this parses the input file
@@ -46,6 +46,9 @@ class Parser:
 
                 if stripped_line.index("//") > 0:
                     stripped_line = stripped_line[0:line.index("//")]
+                    # strip the line again as there should be whitespace between
+                    # the inline comments, and we need to strip that away.
+                    stripped_line = stripped_line.strip(" ")
 
             except IndexError:
                 # print("filtered!")
@@ -94,9 +97,8 @@ class Parser:
             if self.current_file_index + 1 > max_file_index:
                 return False
             else:
-                print()
-                print("// file change!")
                 self.current_file_index += 1
+
                 # the current file's name.
                 self.file_name = self.file_list[self.current_file_index]
 
@@ -119,6 +121,7 @@ class Parser:
 
                         if stripped_line.index("//") > 0:
                             stripped_line = stripped_line[0:line.index("//")]
+                            stripped_line = stripped_line.strip(" ")
 
                     except IndexError:
                         # print("filtered!")
@@ -146,7 +149,7 @@ class Parser:
         # arithmetic. If it's not then I'll also have an error.
         try:
             if stripped_line.index("push") == 0:
-                return Command(1)
+                return Command.PUSH
         except ValueError:
             pass
 

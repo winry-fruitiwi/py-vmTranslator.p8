@@ -1,4 +1,4 @@
-@256
+@255
 D=A
 @SP
 M=D
@@ -66,8 +66,6 @@ M=D
 @SP
 M=M+1
 
-// push argument 0
-
 // push constant 2
 @2
 D=A
@@ -77,7 +75,29 @@ M=D
 @SP
 M=M+1
 
-// push constant 2
+// lt
+@SP
+AM=M-1
+D=M
+@SP
+A=M-1
+D=M-D
+@JUMP0.TRUE
+D;JLT
+@JUMP0.FALSE
+0;JMP
+(JUMP0.TRUE)
+@SP
+A=M-1
+M=-1
+@EN0D
+0;JMP
+(JUMP0.FALSE)
+@SP
+A=M-1
+M=0
+(EN0D)
+
 
 // if-goto IF_TRUE
 @SP
@@ -90,7 +110,7 @@ D;JNE
 @IF_FALSE
 0;JMP
 
-// label IF_TRUE          
+// label IF_TRUE
 (IF_TRUE)
 
 // push argument 0        
@@ -105,8 +125,6 @@ A=M
 M=D
 @SP
 M=M+1
-
-// push argument 0        
 
 // return
 @LCL
@@ -148,7 +166,7 @@ AM=M-1
 A=M
 0;JMP
 
-// label IF_FALSE         
+// label IF_FALSE
 (IF_FALSE)
 
 // push argument 0
@@ -164,8 +182,6 @@ M=D
 @SP
 M=M+1
 
-// push argument 0
-
 // push constant 2
 @2
 D=A
@@ -175,9 +191,18 @@ M=D
 @SP
 M=M+1
 
-// push constant 2
+// sub
+@SP
+A=M-1
+D=M
+@SP
+A=M-1
+A=A-1
+M=M-D
+@SP
+M=M-1
 
-// call Main.fibonacci 1  
+// call Main.fibonacci 1
 @SP
 
 @$ret.1
@@ -237,8 +262,6 @@ M=D
 @SP
 M=M+1
 
-// push argument 0
-
 // push constant 1
 @1
 D=A
@@ -248,9 +271,18 @@ M=D
 @SP
 M=M+1
 
-// push constant 1
+// sub
+@SP
+A=M-1
+D=M
+@SP
+A=M-1
+A=A-1
+M=M-D
+@SP
+M=M-1
 
-// call Main.fibonacci 1  
+// call Main.fibonacci 1
 @SP
 
 @$ret.2
@@ -296,6 +328,17 @@ M=D
 @Main.fibonacci
 0;JMP
 ($ret.2)
+
+// add
+@SP
+A=M-1
+D=M
+@SP
+A=M-1
+A=A-1
+M=D+M
+@SP
+M=M-1
 
 // return
 @LCL
@@ -349,9 +392,7 @@ M=D
 @SP
 M=M+1
 
-// push constant 4
-
-// call Main.fibonacci 1   
+// call Main.fibonacci 1
 @SP
 
 @$ret.3
@@ -401,7 +442,7 @@ M=D
 // label WHILE
 (WHILE)
 
-// goto WHILE              
+// goto WHILE
 @WHILE
 0;JMP
 

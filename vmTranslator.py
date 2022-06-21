@@ -18,7 +18,7 @@ vm_files = []
 # print("M=D")
 
 code_writer.write_lines([
-    "@256",
+    "@255",
     "D=A",
     "@SP",
     "M=D"
@@ -37,7 +37,9 @@ parser = Parser(vm_files, current_directory)
 # currently commenting out for testing in isolation
 while parser.has_more_commands():
     current_line = parser.currentLine
-    # print(current_line)
+
+    # hack into the CodeWriter itself and get its file, then write into it!
+    # code_writer.file.write(current_line + "\n")
 
     # find the command type of the parser
     command_type = parser.command_type()
@@ -45,30 +47,31 @@ while parser.has_more_commands():
     # if the command type was push or pop, translate using the memory access
     # protocol. Now uses enums to help distinguish between command types.
     if (
-            command_type == Command.C_POP or
-            command_type == Command.C_PUSH
+            command_type == Command.POP or
+            command_type == Command.PUSH
     ):
         code_writer.translate_mem_access(current_line)
 
     # if the command type is arithmetic, translate using the arithmetic
-    # protocol if command_type == Command.C_ARITHMETIC:
+    # protocol
+    if command_type == Command.ARITHMETIC:
         code_writer.translate_arithmetic(current_line)
 
     # if the command type is label, if (if-goto), or goto, translate using the
     # branching protocol. The function will handle its values inside itself.
     if (
-            command_type == Command.C_LABEL or
-            command_type == Command.C_IF or
-            command_type == Command.C_GOTO
+            command_type == Command.LABEL or
+            command_type == Command.IF or
+            command_type == Command.GOTO
     ):
         code_writer.translate_branching(current_line)
 
     # if the command type is function, return, or call, translate using the
     # function protocol.
     if (
-            command_type == Command.C_FUNCTION or
-            command_type == Command.C_RETURN or
-            command_type == Command.C_CALL
+            command_type == Command.FUNCTION or
+            command_type == Command.RETURN or
+            command_type == Command.CALL
     ):
         code_writer.translate_function(current_line)
 

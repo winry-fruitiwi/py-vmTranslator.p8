@@ -1,8 +1,8 @@
 // function Sys.init 0
 (Sys.init)
 
-// push constant 4000
-@4000
+// push constant 4000	
+@4000	
 D=A
 @SP
 A=M
@@ -556,3 +556,4 @@ M=D
 AM=M-1
 A=M
 0;JMP
+

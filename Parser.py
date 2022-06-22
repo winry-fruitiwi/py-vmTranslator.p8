@@ -64,6 +64,10 @@ class Parser:
         # we only need the file array, not the file itself, so we can close it.
         lines.close()
 
+        # a "stack" of function names. Whenever the current line is return or
+        # function, vmTranslator.py will use pop or append.
+        self.file_name_stack = []
+
     # read the input file.
     def read_file(self):
         for line in self.lines:

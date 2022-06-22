@@ -172,7 +172,7 @@ class CodeWriter:
         self.write_lines(assembly)
 
     # translates memory access code, with command types of C_PUSH and C_POP.
-    def translate_mem_access(self, command):
+    def translate_mem_access(self, command, file_name):
         command_breakdown = command.split(" ")
         assembly = [f"// {command}"]
 
@@ -256,7 +256,8 @@ class CodeWriter:
 
             elif command_breakdown[1] == "static":
                 assembly.extend([
-                                f"@file.{i}",    # retrieve value from file.i
+                                f"@{file_name}.{i}",    # retrieve value from
+                                                        # file.i
                                 "D=M",
                                 "@SP",           # set *SP to value from file.i
                                 "A=M",
@@ -386,11 +387,11 @@ class CodeWriter:
 
             elif command_breakdown[1] == "static":
                 assembly.extend([
-                                "@SP",          # SP--, goto SP
+                                "@SP",                # SP--, goto SP
                                 "AM=M-1",
-                                "D=M",          # set SP memory value to D
-                                f"@file.{i}",   # create asm reference
-                                "M=D"           # set file.i's memory to D
+                                "D=M",                # set SP memory value to D
+                                f"@{file_name}.{i}",  # create asm reference
+                                "M=D"                 # set file.i's memory to D
                                 ])
 
             elif command_breakdown[1] == "pointer":

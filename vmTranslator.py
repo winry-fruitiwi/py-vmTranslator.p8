@@ -2,7 +2,7 @@ import os
 from CodeWriter import CodeWriter
 from Parser import Parser, Command
 
-current_directory = "FibonacciElement"
+current_directory = "StaticsTest"
 code_writer = CodeWriter(current_directory)
 directory_file_list = os.listdir(f"./{current_directory}")
 
@@ -73,6 +73,16 @@ while parser.has_more_commands():
             command_type == Command.RETURN or
             command_type == Command.CALL
     ):
+        # if the command type is FUNCTION then I can append the file name to
+        # my file name stack, otherwise if the type is RETURN pop the latest
+        # file name.
+        if command_type == Command.FUNCTION:
+            # the file name is arg1 split by the period
+            function_name = parser.arg2()
+            split_function_name = function_name.split(".")
+            parser.file_name_stack.append(split_function_name[0])
+            print(parser.file_name_stack)
+
         code_writer.translate_function(current_line)
 
     # advance to avoid an infinite loop

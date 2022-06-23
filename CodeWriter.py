@@ -1,9 +1,6 @@
 # this class writes code into the console to be added to SimpleAdd.asm.
 
 
-# noinspection PyMethodMayBeStatic
-# noinspection GrazieInspection
-
 class CodeWriter:
     def __init__(self, directory_name):
         # opens output file
@@ -201,7 +198,7 @@ class CodeWriter:
                                 "D=A",
                                 "@THIS",    # goto *(THIS)
                                 "A=M",
-                                "A=D+A",    # return... this should be A=D+A
+                                "A=D+A",
                                 'D=M',
                                 "@SP",      # goto *SP
                                 "A=M",
@@ -216,7 +213,7 @@ class CodeWriter:
                                 "D=A",
                                 "@THAT",    # goto *(THAT)
                                 "A=M",
-                                "A=D+A",    # return... this should be A=D+A
+                                "A=D+A",
                                 'D=M',
                                 "@SP",      # goto *SP
                                 "A=M",
@@ -231,7 +228,7 @@ class CodeWriter:
                                 "D=A",
                                 "@LCL",     # goto *(THAT)
                                 "A=M",
-                                "A=D+A",    # return... this should be A=D+A
+                                "A=D+A",
                                 'D=M',
                                 "@SP",      # goto *SP
                                 "A=M",
@@ -520,8 +517,6 @@ class CodeWriter:
             self.current_function = command_breakdown[1]
 
             assembly.extend([
-                # max(1-numArgs, 0) for 0 args: max(1-0, 0) = 1
-                # max(1-numArgs, 0) for 1 args: max(1-1, 0) = 0
                 '@SP',
                 ('M=M+1' if max(1-int(command_breakdown[2]), 0) else ''),
 

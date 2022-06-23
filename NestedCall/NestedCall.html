@@ -41,7 +41,7 @@ The test setup also initializes the LCL, ARG, THIS and THAT pointers to -1, -2, 
 
 <span class="code">THIS</span> and <span class="code">THAT</span> are set to known values so that context save and restore can be tested.
 <p>
-Sys.init() calls Sys.main() and stores the return value in <span class="code">temp 1</span>.  This tests call to and 
+Sys.init() calls Sys.main() and stores the return value in <span class="code">temp 1</span>.  These tests call to and
 return from a function with no arguments.
 
 <h4>Sys.main()</h4>
@@ -50,7 +50,7 @@ Sys.main() allocates 5 local variables.  It sets <span class="code">local 1</spa
 <p> 
 <span class="code">THIS</span> and <span class="code">THAT</span> are changed so that context save and restore can be tested.
 <p>
-Sys.main() calls Sys.add12(123) and stores the return value in <span class="code">temp 0</span>.  This tests call to and 
+Sys.main() calls Sys.add12(123) and stores the return value in <span class="code">temp 0</span>.  These tests call to and
 return from a function with arguments.
 <p>
 After Sys.add12() returns, Sys.main() sums <span class="code">local 0</span> through <span class="code">local 4</span> and returns the 
@@ -116,7 +116,7 @@ example:<br>
 &emsp;&bull;&ensp;set a PC breakpoint at the ROM address for <span class="code">(Sys.main)</span>,<br>
 &emsp;&bull;&ensp;hit the run button.<br>
 When the CPU Emulator stops at the breakpoint you can inspect the RAM to check the stack and pointers values.
-(If the breakpoint isn't hit, you will need to to single-step debug through 
+(If the breakpoint isn't hit, you will need to single-step debug through
 your calling code to see why it didn't get there.)
 <p>
 Other useful places to set breakpoints are the entry points to the other functions and at the 

@@ -6,40 +6,40 @@ current_directory = "StaticsTest"
 code_writer = CodeWriter(current_directory)
 directory_file_list = os.listdir(f"./{current_directory}")
 
-# code is temporarily commented out for testing purposes
-#
-# file_path = os.listdir("./FibonacciSeries") # change for specific file
 # list of VM files in current_directory
 vm_files = []
 
-# print("@256")
-# print("D=A")
-# print("@SP")
-# print("M=D")
-
+# The initial bootstrap code should have argument set to 256, and then a fake
+# call frame would be "initialized" where SP would be advanced by 5. Then I
+# would immediately goto Sys.init.
 code_writer.write_lines([
-    "@255",
+    "@256",
+    "D=A",
+    "@ARG",
+    "M=D",
+
+    "@261",
     "D=A",
     "@SP",
-    "M=D"
+    "M=D",
+
+    "@Sys.init",
+    "0;JMP"
 ])
 
 code_writer.translate_function("call Sys.init 0")
 
 for file in directory_file_list:
     # check the last 3 indices of file. If they equal ".vm", print file.
-    if file[-3:] == ".vm":
+    if file.endswith(".vm"):
         # appends the file name to the list
         vm_files.append(file)
 
 parser = Parser(vm_files, current_directory)
 
-# currently commenting out for testing in isolation
+# A loop that will
 while parser.has_more_commands():
     current_line = parser.currentLine
-
-    # hack into the CodeWriter itself and get its file, then write into it!
-    # code_writer.file.write(current_line + "\n")
 
     # find the command type of the parser
     command_type = parser.command_type()
@@ -73,16 +73,6 @@ while parser.has_more_commands():
             command_type == Command.RETURN or
             command_type == Command.CALL
     ):
-        # if the command type is FUNCTION then I can append the file name to
-        # my file name stack, otherwise if the type is RETURN pop the latest
-        # file name. TODO deprecated
-        # if command_type == Command.FUNCTION:
-        #     # the file name is arg1 split by the period
-        #     function_name = parser.arg2()
-        #     split_function_name = function_name.split(".")
-        #     parser.file_name_stack.append(split_function_name[0])
-        #     print(parser.file_name_stack)
-
         code_writer.translate_function(current_line)
 
     # advance to avoid an infinite loop

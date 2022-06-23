@@ -39,7 +39,6 @@ class Parser:
             try:
                 # if the line is a comment or whitespace, move on.
                 if len(line) == 1:
-                    # print("filtered!")
                     continue
                 if stripped_line.index("//") == 0:
                     continue
@@ -51,7 +50,6 @@ class Parser:
                     stripped_line = stripped_line.strip(" ")
 
             except IndexError:
-                # print("filtered!")
                 continue
             except ValueError:
                 pass
@@ -64,17 +62,13 @@ class Parser:
         # we only need the file array, not the file itself, so we can close it.
         lines.close()
 
-        # a "stack" of function names. Whenever the current line is return or
-        # function, vmTranslator.py will use pop or append.
-        self.file_name_stack = []
-
-    # read the input file.
+    # read the input file. TODO deprecated
     def read_file(self):
         for line in self.lines:
             stripped_line = line.strip(" ").strip("\n")
             print(f'{stripped_line}')
 
-    # reads the current line
+    # reads the current line TODO deprecated
     def read_current_line(self):
         stripped_line = self.currentLine.strip(" ").strip("\n")
         self.advance()
@@ -118,7 +112,6 @@ class Parser:
                     try:
                         # if the line is a comment or whitespace, move on.
                         if len(line) == 1:
-                            # print("filtered!")
                             continue
                         if stripped_line.index("//") == 0:
                             continue
@@ -128,7 +121,6 @@ class Parser:
                             stripped_line = stripped_line.strip(" ")
 
                     except IndexError:
-                        # print("filtered!")
                         continue
                     except ValueError:
                         pass
@@ -204,7 +196,7 @@ class Parser:
         line_components = self.currentLine.split(" ")
         return line_components[0]
 
-    # find the first argument of the current line
+    # find the second argument of the current line TODO deprecated
     def arg2(self):
         try:
             # this should work for memory access, function, and call statements.

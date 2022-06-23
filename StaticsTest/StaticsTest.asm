@@ -1,7 +1,13 @@
-@255
+@256
+D=A
+@ARG
+M=D
+@261
 D=A
 @SP
 M=D
+@Sys.init
+0;JMP
 
 // call Sys.init 0
 @SP

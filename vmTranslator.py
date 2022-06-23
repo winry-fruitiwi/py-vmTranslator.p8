@@ -50,7 +50,7 @@ while parser.has_more_commands():
             command_type == Command.POP or
             command_type == Command.PUSH
     ):
-        code_writer.translate_mem_access(current_line)
+        code_writer.translate_mem_access(current_line, parser.file_name)
 
     # if the command type is arithmetic, translate using the arithmetic
     # protocol
@@ -75,13 +75,13 @@ while parser.has_more_commands():
     ):
         # if the command type is FUNCTION then I can append the file name to
         # my file name stack, otherwise if the type is RETURN pop the latest
-        # file name.
-        if command_type == Command.FUNCTION:
-            # the file name is arg1 split by the period
-            function_name = parser.arg2()
-            split_function_name = function_name.split(".")
-            parser.file_name_stack.append(split_function_name[0])
-            print(parser.file_name_stack)
+        # file name. TODO deprecated
+        # if command_type == Command.FUNCTION:
+        #     # the file name is arg1 split by the period
+        #     function_name = parser.arg2()
+        #     split_function_name = function_name.split(".")
+        #     parser.file_name_stack.append(split_function_name[0])
+        #     print(parser.file_name_stack)
 
         code_writer.translate_function(current_line)
 
